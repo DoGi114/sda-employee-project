@@ -1,5 +1,7 @@
 package com.sda.dto;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "employees")
+@Data
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,62 +36,6 @@ public class Employee {
         this.position = position;
         this.salary = salary;
         this.birthYear = birthYear;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public Double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Double salary) {
-        this.salary = salary;
-    }
-
-    public LocalDate getBirthYear() {
-        return birthYear;
-    }
-
-    public void setBirthYear(LocalDate birthYear) {
-        this.birthYear = birthYear;
-    }
-
-    public List<Vacation> getVacations() {
-        return vacations;
-    }
-
-    public void setVacations(List<Vacation> vacations) {
-        this.vacations = vacations;
     }
 
     @Override

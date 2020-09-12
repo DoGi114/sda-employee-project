@@ -1,11 +1,14 @@
 package com.sda.dto;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table(name = "vacations")
+@Data
 public class Vacation {
     @ManyToOne
     @JoinColumn(name = "employeeId")
@@ -25,30 +28,6 @@ public class Vacation {
     public Vacation(Employee owner, LocalDate starts, LocalDate ends) {
         this.owner = owner;
         this.starts = starts;
-        this.ends = ends;
-    }
-
-    public Employee getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Employee owner) {
-        this.owner = owner;
-    }
-
-    public LocalDate getStarts() {
-        return starts;
-    }
-
-    public void setStarts(LocalDate starts) {
-        this.starts = starts;
-    }
-
-    public LocalDate getEnds() {
-        return ends;
-    }
-
-    public void setEnds(LocalDate ends) {
         this.ends = ends;
     }
 
