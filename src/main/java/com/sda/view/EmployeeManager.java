@@ -63,6 +63,8 @@ public class EmployeeManager {
 
         System.out.println("Podaj wyngrodzenie:");
         employee.setSalary(Double.parseDouble(scanner.nextLine()));
+
+        employeeDAO.addEmployee(employee);
     }
 
     public void consoleRemoveEmployee() {
