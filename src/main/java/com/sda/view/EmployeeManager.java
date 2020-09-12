@@ -1,6 +1,7 @@
 package com.sda.view;
 
 import com.sda.CompanyEntityManager;
+import com.sda.dao.EmployeeDAO;
 import com.sda.dto.Employee;
 import com.sda.view.table.TablePrinter;
 
@@ -12,9 +13,10 @@ import java.util.Scanner;
 
 public class EmployeeManager {
 
+    private final EmployeeDAO employeeDAO = new EmployeeDAO();
 
     public void consoleAllEmployees() {
-        consoleAllEmployees(getAllEmployees());
+        consoleAllEmployees(employeeDAO.getAllEmployees());
     }
 
     private void consoleAllEmployees(List<Employee> employees) {
@@ -37,32 +39,10 @@ public class EmployeeManager {
         long id = Long.parseLong(scanner.nextLine());
 
         try {
-            consoleAllEmployees(List.of(getEmployee(id)));
+            consoleAllEmployees(List.of(employeeDAO.getEmployee(id)));
         }catch (NullPointerException e){
             System.err.println("There is no employee with given id!");
         }
-    }
-
-    public List<Employee> getAllEmployees() {
-
-        EntityManager entityManager = CompanyEntityManager.getEntityManager();
-
-        List<Employee> employeeList = entityManager.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
-
-        
-
-        return employeeList;
-    }
-
-    public Employee getEmployee(long id) {
-
-        EntityManager entityManager = CompanyEntityManager.getEntityManager();
-
-        Employee employee = entityManager.find(Employee.class, id);
-
-        
-
-        return employee;
     }
 
     public void consoleAddEmployee() {
@@ -85,14 +65,6 @@ public class EmployeeManager {
         employee.setSalary(Double.parseDouble(scanner.nextLine()));
     }
 
-    public void addEmployee(Employee employee){
-        EntityManager entityManager = CompanyEntityManager.getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(employee);
-        entityManager.getTransaction().commit();
-        
-    }
-
     public void consoleRemoveEmployee() {
         Scanner scanner = new Scanner(System.in);
 
@@ -100,25 +72,7 @@ public class EmployeeManager {
 
         long id = Long.parseLong(scanner.nextLine());
 
-        removeEmployee(id);
-    }
-
-    public void removeEmployee(long id){
-        EntityManager entityManager = CompanyEntityManager.getEntityManager();
-
-        entityManager.getTransaction().begin();
-
-        Employee employee = getEmployee(id);
-
-        if (!entityManager.contains(employee)) {
-            employee = entityManager.getReference(employee.getClass(), employee.getId());
-        }
-
-        entityManager.remove(employee);
-        entityManager.getTransaction().commit();
-
-
-        
+        employeeDAO.removeEmployee(id);
     }
 
     public void consoleUpdateEmployee(){
@@ -129,23 +83,6 @@ public class EmployeeManager {
         String newPosition = scanner.nextLine();
         System.out.println("Podaj nowe wyngrodzenie:");
         double newSalary = Double.parseDouble(scanner.nextLine());
-        updateEmployee(id, newPosition, newSalary);
-    }
-
-    public void updateEmployee(Long id, String newPosition, double newSalary){
-        EntityManager entityManager = CompanyEntityManager.getEntityManager();
-        entityManager.getTransaction().begin();
-
-        Employee employee = getEmployee(id);
-
-        if (!entityManager.contains(employee)) {
-            employee = entityManager.getReference(employee.getClass(), employee.getId());
-        }
-
-        employee.setPosition(newPosition);
-        employee.setSalary(newSalary);
-
-        entityManager.getTransaction().commit();
-        
+        employeeDAO.updateEmployee(id, newPosition, newSalary);
     }
 }

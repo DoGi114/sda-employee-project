@@ -1,6 +1,7 @@
 package com.sda.view;
 
 import com.sda.CompanyEntityManager;
+import com.sda.dao.VacationsDAO;
 import com.sda.dto.Vacation;
 import com.sda.view.table.TablePrinter;
 
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class VacationsManager {
+
+    private final VacationsDAO vacationsDAO = new VacationsDAO();
 
     public void consoleAddVacation() {
         Scanner scanner = new Scanner(System.in);
@@ -24,37 +27,11 @@ public class VacationsManager {
         System.out.println("Podaj końcową date urlopu w formacie dd-MM-RRRR:");
         LocalDate end = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-        addVacation(id, start, end);
-    }
-
-    public void addVacation(long id, LocalDate start, LocalDate end){
-        EntityManager entityManager = CompanyEntityManager.getEntityManager();
-
-        Vacation vacation = new Vacation();
-        vacation.setOwner(new EmployeeManager().getEmployee(id));
-        vacation.setStarts(start);
-        vacation.setEnds(end);
-
-        entityManager.getTransaction().begin();
-        entityManager.persist(vacation);
-        entityManager.getTransaction().commit();
-
-
-    }
-
-    public List<Vacation> getAllVacations(){
-        EntityManager entityManager = CompanyEntityManager.getEntityManager();
-
-        List<Vacation> vacationList = entityManager.createQuery("SELECT e FROM Vacation e", Vacation.class).getResultList();
-
-
-
-
-        return vacationList;
+        vacationsDAO.addVacation(id, start, end);
     }
 
     public void consoleAllVacations() {
-        consoleAllVacations(getAllVacations());
+        consoleAllVacations(vacationsDAO.getAllVacations());
     }
 
     private void consoleAllVacations(List<Vacation> vacations){
@@ -69,16 +46,6 @@ public class VacationsManager {
         tablePrinter.printTable();
     }
 
-    public List<Vacation> getVacations(long id) {
-        EntityManager entityManager = CompanyEntityManager.getEntityManager();
-
-        List<Vacation> vacationList = entityManager.createQuery("SELECT e FROM Vacation e WHERE employeeId = " + id, Vacation.class).getResultList();
-
-
-
-        return vacationList;
-    }
-
     public void consoleVacations(){
         Scanner scanner = new Scanner(System.in);
 
@@ -89,7 +56,7 @@ public class VacationsManager {
 
     public void printVacation(long id) {
         try {
-            consoleAllVacations(getVacations(id));
+            consoleAllVacations(vacationsDAO.getVacations(id));
         }catch (NullPointerException e){
             System.err.println("There is no employee or vacations with given id!");
         }
