@@ -14,7 +14,7 @@ public class VacationsDAO {
         EntityManager entityManager = CompanyEntityManager.getEntityManager();
 
         Vacation vacation = new Vacation();
-        vacation.setOwner(new EmployeeManager().getEmployee(id));
+        vacation.setOwner(new EmployeeDAO().getEmployee(id));
         vacation.setStarts(start);
         vacation.setEnds(end);
 

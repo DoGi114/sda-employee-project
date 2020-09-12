@@ -29,6 +29,7 @@ public class TestEmployeeManager {
 
     @Test
     public void Test1AddEmployee() throws Exception {
+        EmployeeDAO employeeDAO = new EmployeeDAO();
         Employee e = new Employee();
         e.setFirstName("Damian");
         e.setLastName("Nguyen");
